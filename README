@@ -1,0 +1,2 @@
+Use:
+  ansible-playbook -i inventory -K -c local playbooks/setup-dev-env.yaml

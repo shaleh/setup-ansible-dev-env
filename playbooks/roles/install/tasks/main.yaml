@@ -1,0 +1,38 @@
+- name: install apt packages
+  apt:
+    pkg={{ item }}
+    update_cache=yes
+    cache_valid_time=86400
+  with_items:
+    - aspell
+    - build-essential
+    - emacs24-nox
+    - git
+    - python-dev
+  sudo: yes
+
+- name: Python packages
+  pip:
+    name={{ item }}
+  with_items:
+    - virtualenv
+    - tox
+  sudo: yes
+
+- name: Make repos dir
+  file: path="{{ home_directory }}/repos/personal state=directory"
+
+- name: Personal git repos
+  git:
+    repo=https://github.com/shaleh/{{ item }}
+    dest="{{ home_directory }}/repos/personal/{{ item }}"
+    update=no
+  with_items:
+    - dot-files
+    - useful-things
+
+- name: setup dot files
+  command: sh do-install.sh
+  args:
+    chdir: "{{ home_directory }}/repos/personal/dot-files"
+    creates: "{{ home_directory }}/.emacs.d"

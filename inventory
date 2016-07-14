@@ -1,0 +1,5 @@
+[all]
+localhost home_directory=/home/stack
+
+[dev]
+localhost home_directory=/home/stack
