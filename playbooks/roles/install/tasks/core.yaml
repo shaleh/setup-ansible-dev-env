@@ -1,0 +1,35 @@
+- name: install core dev packages
+  apt:
+    pkg={{ item }}
+    update_cache=yes
+    cache_valid_time=86400
+  with_items:
+    - build-essential
+    - git
+  sudo: yes
+
+- name: user desired packages
+  apt:
+    pkg={{ item }}
+    update_cache=yes
+    cache_valid_time=86400
+  with_items: user_packages
+  sudo: yes
+
+- name: Make repos dir
+  file: path="{{ home_directory }}/{{ personal_repos_path }}" state=directory
+  when: personal_repos_path is defined
+
+- name: Personal git repos
+  git:
+    repo="{{ item.repo }}"
+    dest="{{ home_directory }}/{{ personal_repos_path }}/{{ item.name }}"
+    update=no
+  with_items: personal_repos
+
+- name: setup dot files
+  command: "{{ dotfiles.command }}"
+  args:
+    chdir: "{{ dotfiles.path }}"
+    creates: "{{ dotfiles.creates }}"
+  when: dotfiles is defined

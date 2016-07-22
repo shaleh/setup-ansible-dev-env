@@ -1,0 +1,19 @@
+---
+personal_repos_path: 'repos/personal'
+personal_repos:
+  - { repo: 'https://github.com/shaleh/dot-files', name: 'dot-files' }
+  - { repo: 'https://github.com/shaleh/useful-things', name: 'useful-things' }
+dotfiles:
+  path: "{{ home_directory }}/{{ personal_repos_path }}/dot-files"
+  command: "sh do-install.sh"
+  creates: "{{ home_directory }}/.emacs.d"
+python_packages:
+  - libkrb5-dev
+  - libssl-dev
+  - libxml2-dev
+  - libxslt-dev
+  - python-dev
+user_packages:
+  - aspell
+  - emacs24-nox
+  - httpie
