@@ -1,0 +1,24 @@
+- name: Clone setup-git-repo
+  git:
+    repo="https://github.com/shaleh/setup-git-repo"
+    dest="{{ home_directory }}/{{ personal_repos_path }}/'setup-git-repo'"
+    update=no
+  become: no
+
+- name: Copy git setup tools
+  command: install -m 755 "{{ home_directory }}/{{ personal_repos_path }}/setup-git-repo/{{ item }}" "{{ home_directory }}/bin/"
+  args:
+    creates: "{{ home_directory/bin/{{ item }}"
+  with_items:
+    - setup-git
+    - git-validate-my-config
+  become: no
+
+- name: Symlink git setup tools
+  command: ln -s git-validate-my-config "{{ item }}"
+  args:
+    chdir: "{{ home_directory }}/bin"
+    creates: "{{ home_directory/bin/{{ item }}"
+  with_items:
+    - git-review
+  become: no

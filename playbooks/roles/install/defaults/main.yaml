@@ -18,3 +18,4 @@ user_packages:
   - aspell
   - emacs24-nox
   - httpie
+use_setup_git_repo: yes

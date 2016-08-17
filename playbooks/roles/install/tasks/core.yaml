@@ -6,7 +6,7 @@
   with_items:
     - build-essential
     - git
-  sudo: yes
+  become: yes
 
 - name: user desired packages
   apt:
@@ -14,11 +14,19 @@
     update_cache=yes
     cache_valid_time=86400
   with_items: user_packages
-  sudo: yes
+  become: yes
 
 - name: Make repos dir
   file: path="{{ home_directory }}/{{ personal_repos_path }}" state=directory
   when: personal_repos_path is defined
+  become: no
+
+- name: Ensure personal bin dir exists
+  file: path="{{ home_directory }}/bin" state=directory
+  become: no
+
+- include: use-setup-git-repo.yaml
+  when: use_setup_git_repo
 
 - name: Personal git repos
   git:
@@ -26,6 +34,7 @@
     dest="{{ home_directory }}/{{ personal_repos_path }}/{{ item.name }}"
     update=no
   with_items: personal_repos
+  become: no
 
 - name: setup dot files
   command: "{{ dotfiles.command }}"
@@ -33,3 +42,4 @@
     chdir: "{{ dotfiles.path }}"
     creates: "{{ dotfiles.creates }}"
   when: dotfiles is defined
+  become: no
