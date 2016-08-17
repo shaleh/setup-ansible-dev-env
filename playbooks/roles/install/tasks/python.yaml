@@ -4,7 +4,8 @@
     update_cache=yes
     cache_valid_time=86400
   with_items: python_packages
-  sudo: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  become: yes
 
 - name: Python tools and bits
   pip:
@@ -12,4 +13,4 @@
   with_items:
     - virtualenv
     - tox
-  sudo: yes
+  become: yes
